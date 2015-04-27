@@ -125,9 +125,7 @@ function update(mod)
 render = function()
 {
   ctx.drawImage(blackback,0,0,600,600);
-
   bolts.forEach(function(i) { i.update(ctx);})
-
   //ctx.clearRect(0,0,canvas.x,canvas.y);
   update(null);
   player1.draw(ctx);
