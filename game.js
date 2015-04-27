@@ -4,8 +4,6 @@ var keys = [];
 var keysup = [];
 var wizard = new Image();
 wizard.src = 'wizard.bmp';
-var lightning = new Image();
-lightning.src = 'lightning.bmp';
 var started = false;
 var mouseIsDown = false;
 var mousePosition = [];
@@ -57,18 +55,6 @@ window.addEventListener('mousemove', function(e) {
       }, false);
 
 
-var lightningBolts = [];
-var lightningBolt = function(direction)
-{
-  this.x = x;
-  this.y = y;
-
-  this.draw = function(ctx)
-  {
-
-  };
-}
-
 
 var player = function(x,y,hearts,isShooting)
 {
@@ -81,13 +67,7 @@ var player = function(x,y,hearts,isShooting)
     ctx.drawImage(wizard,this.x,this.y,40,40);
 
   };
-  /*
-  this.update = function(ctx)
-  {
 
-
-  };
-  */
   this.shoot = function(ctx)
   {
       if (this.isShooting)
@@ -95,6 +75,7 @@ var player = function(x,y,hearts,isShooting)
         console.log('shooting');
         ctx.beginPath();
         ctx.moveTo(this.x+35, this.y+6);
+        var lineDirection
         ctx.lineTo(mousePosition.x, mousePosition.y);
         //console.log(mousePosition.x, mousePosition.y)
         ctx.strokeStyle="yellow";
@@ -106,21 +87,7 @@ var player = function(x,y,hearts,isShooting)
 };
 
 player1 = new player(0,0,5,false);
-/*
-var drawMaps =
-{
-  drawLevelOne: function()
-  {
-    for(var i = 0; i < 10; i++)
-    {
-      grassTiles[i] = new grassSquare(0,0);
-    }
 
-  }
-
-
-};
-*/
 
 function update(mod)
 {
@@ -140,34 +107,6 @@ function update(mod)
   {
     player1.y += 3;
 	}
-
-
-
-
-
-
-  /*
-  if(keys[87])
-  {
-    player1.shoot('up');
-	}
-
-  if(keys[83])
-  {
-    player1.shoot('down');
-	}
-
-  if(keys[68])
-  {
-    player1.shoot('right');
-  }
-
-  if(keys[65])
-  {
-    player1.shoot('left');
-  }
-*/
-
 
 }
 render = function()
