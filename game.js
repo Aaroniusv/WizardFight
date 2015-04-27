@@ -56,23 +56,25 @@ window.addEventListener('mousemove', function(e) {
       }, false);
 
 
-//var lightningBolts = [];
+var bolts = [];
 var lightningBolt = function(x,y,mx,my)
 {
   this.x = x;
   this.y = y;
   this.mx = mx;
   this.my = my;
-  this.update = function()
+  this.update = function(ctx)
   {
+    //console.log(this.mx,this.my);
+    this.x += 1;
+    this.y += 1;
+    this.draw(ctx);
   };
   this.draw = function(ctx)
   {
-    //ctx.beginPath();
-    //ctx.lineWidth="6";
     ctx.fillStyle="yellow";
-    ctx.fillRect(this.x,this.y,20,20);
-    console.log("trying to draw lightning...");
+    ctx.fillRect(this.x,this.y,10,10);
+    //console.log("trying to draw lightning...");
   };
 }
 
@@ -92,11 +94,11 @@ var player = function(x,y,hearts,isShooting)
   {
     if(this.isShooting)
     {
+      var i = 0;
       console.log("shooting");
-      bolt = new lightningBolt(this.x+30,this.y+5,mousePosition.x,mousePosition.y);
-      //console.log(this.x,this.y);
-      //console.log(mousePosition.x,mousePosition.y);
-      bolt.draw(ctx);
+      bolts[i] = new lightningBolt(this.x+30,this.y+5,mousePosition.x,mousePosition.y);
+      i++;
+
     }
     else if(!this.isShooting)
     {
@@ -133,6 +135,7 @@ render = function()
   update(null);
   player1.draw(ctx);
   player1.shoot(ctx);
+  bolts.forEach(function(i) { i.update(ctx);})
   requestAnimationFrame(render);
 }
 function main()
