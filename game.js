@@ -11,12 +11,16 @@ var mouseIsDown = false;
 var mousePosition = [];
 window.onmousedown = function(e){
     mouseIsDown = true;
-    player1.shoot(true);
+    player1.isShooting = true;
+    //player1.shoot(ctx);
+
     //console.log('mouse down');
 }
 window.onmouseup = function(e){
     mouseIsDown = false;
-    player1.shoot(false);
+    player1.isShooting = false;
+
+    //player1.shoot(ctx);
     //console.log('mouse up');
 }
 window.addEventListener("keydown", function(e) {
@@ -61,18 +65,14 @@ var lightningBolt = function(x,y,mx,my)
   this.my = my;
   this.update = function()
   {
-
   };
   this.draw = function(ctx)
   {
-      ctx.beginPath();
-      ctx.moveTo(this.x+35, this.y+6);
-      ctx.lineTo(mousePosition.x, mousePosition.y);
-      console.log(mousePosition.x, mousePosition.y)
-      ctx.strokeStyle="yellow";
-      ctx.lineWidth = 6;
-      ctx.stroke();
-      console.log("trying to draw lightning...");
+    //ctx.beginPath();
+    //ctx.lineWidth="6";
+    ctx.fillStyle="yellow";
+    ctx.fillRect(this.x,this.y,20,20);
+    console.log("trying to draw lightning...");
   };
 }
 
@@ -82,22 +82,23 @@ var player = function(x,y,hearts,isShooting)
   this.x = x;
   this.y = y;
   this.hearts = hearts;
+  this.isShooting = isShooting;
   this.draw = function(ctx)
   {
     ctx.drawImage(wizard,this.x,this.y,40,40);
   };
 
-  this.shoot = function(bool)
+  this.shoot = function()
   {
-    if(bool)
+    if(this.isShooting)
     {
       console.log("shooting");
-      bolt = new lightningBolt(this.x+35,this.y+10,mousePosition.x,mousePosition.y);
+      bolt = new lightningBolt(this.x+30,this.y+5,mousePosition.x,mousePosition.y);
       //console.log(this.x,this.y);
       //console.log(mousePosition.x,mousePosition.y);
       bolt.draw(ctx);
     }
-    else if(!bool)
+    else if(!this.isShooting)
     {
       console.log("not shooting");
 
@@ -127,10 +128,11 @@ function update(mod)
 }
 render = function()
 {
+  ctx.fillStyle="black";
   ctx.fillRect(0,0,canvas.width,canvas.height);
   update(null);
   player1.draw(ctx);
-  //player1.shoot(ctx);
+  player1.shoot(ctx);
   requestAnimationFrame(render);
 }
 function main()
