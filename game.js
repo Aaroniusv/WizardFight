@@ -86,7 +86,6 @@ var player = function(x,y,hearts,isShooting)
   {
     var i = 0;
     bolts[i] = new lightningBolt(this.x+30,this.y+5,mousePosition.x,mousePosition.y);
-    bolts.forEach(function(i) { i.update(ctx);})
     console.log("shooting");
     i++;
   };
@@ -127,6 +126,7 @@ render = function()
 {
   ctx.drawImage(blackback,0,0,600,600);
 
+  bolts.forEach(function(i) { i.update(ctx);})
 
   //ctx.clearRect(0,0,canvas.x,canvas.y);
   update(null);
