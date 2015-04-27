@@ -6,6 +6,8 @@ var wizard = new Image();
 wizard.src = 'wizard.bmp';
 var lightning = new Image();
 lightning.src = 'lightning.bmp';
+var blackback = new Image();
+blackback.src = 'blackback.bmp';
 var started = false;
 var mouseIsDown = false;
 var mousePosition = [];
@@ -115,12 +117,17 @@ function update(mod)
   if(!mouseIsDown)
   {
     console.log("not shooting");
+    bolts.forEach(function(i)
+    {
+      i = [];
+    });
   }
 }
 render = function()
 {
-  ctx.fillStyle="black";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(blackback,0,0,600,600);
+
+
   //ctx.clearRect(0,0,canvas.x,canvas.y);
   update(null);
   player1.draw(ctx);
