@@ -96,14 +96,9 @@ var player = function(x,y,hearts,mana,isShooting)
   };
   this.DrawManaMeter = function(ctx)
   {
-    ctx.beginPath();
-    ctx.strokeStyle="blue";
-    ctx.moveTo(500, 20);
-    ctx.lineTo(500+this.mana, 20);
-    ctx.lineWidth = this.mana/20;
-    ctx.stroke();
-    ctx.closePath();
-    ctx.restore()
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(0,5,this.mana,10);
+
   }
   this.shoot = function()
   {
@@ -136,15 +131,17 @@ function update()
     if (player1.mana >= 5)
     {
       player1.shoot();
-      player1.mana -= 5;
+      player1.mana -= 2;
       console.log(player1.mana);
     }
   }
   if(!mouseIsDown)
   {
-    if (player1.mana < 500)
+    if (player1.mana < 100)
     {
-      player1.mana += 3;
+      player1.mana += 1;
+      console.log(player1.mana);
+
     }
 
   }
@@ -157,13 +154,13 @@ render = function()
 
   ctx.fillStyle = "#000"
   ctx.fillRect(0,0,canvas.width, canvas.height);
-
   //this should just keep the alive Game.projectiles
   Game.projectiles = Game.projectiles.filter(function(i) {return i.alive})
   Game.projectiles.forEach(function(i) { i.update(ctx);})
 
   player1.draw(ctx);
   player1.DrawManaMeter(ctx);
+
   requestAnimationFrame(render);
 }
 function main()
