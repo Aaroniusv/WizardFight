@@ -1,6 +1,3 @@
-/*
-
-*/
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var keys = [];
@@ -86,17 +83,28 @@ var lightningBolt = function(x, y, mx, my, age, speed)
 }
 
 
-var player = function(x,y,hearts,isShooting)
+var player = function(x,y,hearts,mana,isShooting)
 {
   this.x = x;
   this.y = y;
   this.hearts = hearts;
+  this.mana = mana;
   this.isShooting = isShooting;
   this.draw = function(ctx)
   {
     ctx.drawImage(wizard,this.x,this.y,40,40);
   };
-
+  this.DrawManaMeter = function(ctx)
+  {
+    ctx.beginPath();
+    ctx.strokeStyle="blue";
+    ctx.moveTo(500, 20);
+    ctx.lineTo(500+this.mana, 20);
+    ctx.lineWidth = this.mana/20;
+    ctx.stroke();
+    ctx.closePath();
+    ctx.restore()
+  }
   this.shoot = function()
   {
       Game.projectiles.push(new lightningBolt(this.x+30, this.y+5,
@@ -125,7 +133,20 @@ function update()
 	}
   if(mouseIsDown)
   {
-    player1.shoot();
+    if (player1.mana >= 5)
+    {
+      player1.shoot();
+      player1.mana -= 5;
+      console.log(player1.mana);
+    }
+  }
+  if(!mouseIsDown)
+  {
+    if (player1.mana < 500)
+    {
+      player1.mana += 3;
+    }
+
   }
 
 }
@@ -142,10 +163,11 @@ render = function()
   Game.projectiles.forEach(function(i) { i.update(ctx);})
 
   player1.draw(ctx);
+  player1.DrawManaMeter(ctx);
   requestAnimationFrame(render);
 }
 function main()
 {
-  player1 = new player(0,0,5,false);
+  player1 = new player(0,0,5,100,false);
   render();
 }
