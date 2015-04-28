@@ -1,3 +1,6 @@
+/*
+
+*/
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var keys = [];
@@ -11,6 +14,8 @@ blackback.src = 'blackback.bmp';
 var started = false;
 var mouseIsDown = false;
 var mousePosition = [];
+var Game = {};
+  Game.projectiles = [];
 window.onmousedown = function(e){
     mouseIsDown = true;
 }
@@ -47,26 +52,36 @@ window.addEventListener('mousemove', function(e)
         mousePosition = getMousePos(canvas, e);
 }, false);
 
-
-var bolts = [];
-var lightningBolt = function(x,y,mx,my)
+var lightningBolt = function(x, y, mx, my, age, speed)
 {
   this.x = x;
   this.y = y;
   this.mx = mx;
   this.my = my;
+  this.age = age;
+  this.alive = true;
+  this.speed = speed
   this.update = function(ctx)
   {
-
-    this.x += 5;
-    this.y += 5;
+    this.age -= 1
+    this.alive = (this.age > 0) ? true : false
+    var norm = Math.sqrt(mx*mx + my*my) // for direction
+    this.x -= this.speed * mx / (norm);
+    this.y -= this.speed * my / (norm);
     this.draw(ctx);
   };
   this.draw = function(ctx)
   {
+    var size = 10
+    ctx.save()
+    ctx.translate(this.x + size/2, this.y + size/2)
+    ctx.rotate(Math.random()*Math.PI*2)
+    ctx.beginPath();
     ctx.strokeStyle="yellow";
-    ctx.rect(this.x,this.y,10,10);
+    ctx.rect(-size/4, -size/4, size, size);
     ctx.stroke();
+    ctx.closePath();
+    ctx.restore()
   };
 }
 
@@ -84,14 +99,13 @@ var player = function(x,y,hearts,isShooting)
 
   this.shoot = function()
   {
-    var i = 0;
-    bolts[i] = new lightningBolt(this.x+30,this.y+5,mousePosition.x,mousePosition.y);
-    console.log("shooting");
-    i++;
+      Game.projectiles.push(new lightningBolt(this.x+30, this.y+5,
+          this.x - mousePosition.x, this.y - mousePosition.y, 70, 10));
+
   };
 };
 
-function update(mod)
+function update()
 {
 	if(keys[68])
   {
@@ -111,25 +125,22 @@ function update(mod)
 	}
   if(mouseIsDown)
   {
-    player1.shoot(ctx);
+    player1.shoot();
   }
-  if(!mouseIsDown)
-  {
-    console.log("not shooting");
-    bolts.forEach(function(i)
-    {
-      i = [];
-    });
-  }
+
 }
 render = function()
 {
-  ctx.drawImage(blackback,0,0,600,600);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  update();
 
-  bolts.forEach(function(i) { i.update(ctx);})
+  ctx.fillStyle = "#000"
+  ctx.fillRect(0,0,canvas.width, canvas.height);
 
-  //ctx.clearRect(0,0,canvas.x,canvas.y);
-  update(null);
+  //this should just keep the alive Game.projectiles
+  Game.projectiles = Game.projectiles.filter(function(i) {return i.alive})
+  Game.projectiles.forEach(function(i) { i.update(ctx);})
+
   player1.draw(ctx);
   requestAnimationFrame(render);
 }
