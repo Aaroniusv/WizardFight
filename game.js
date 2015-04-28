@@ -49,13 +49,32 @@ window.addEventListener('mousemove', function(e)
         mousePosition = getMousePos(canvas, e);
 }, false);
 
+
+
 var blocks = [];
 var Block = function(x,y)
 {
+    this.x = x;
+    this.y = y;
     this.drawblock = function(ctx)
     {
       ctx.fillStyle = 'grey';
       ctx.fillRect(x,y,40,40);
+    };
+    this.collisionUpdate = function()
+    {
+      if
+      (
+        (this.x - player1.x <= 40 && player1.x - this.x <=35) &&
+        (this.y - player1.y <= 40 && player1.y - this.y <=35)
+      )
+      {
+        console.log("hit");
+        return true;
+      }
+    {
+
+    }
     };
 
 };
@@ -94,7 +113,7 @@ var lightningBolt = function(x, y, mx, my, age, speed)
 }
 
 
-var player = function(x,y,hearts,mana,isShooting)
+var player = function(x,y,hearts,mana,isShooting,collision)
 {
   this.x = x;
   this.y = y;
@@ -143,7 +162,6 @@ function update()
     {
       player1.shoot();
       player1.mana -= 2;
-      console.log(player1.mana);
     }
   }
   if(!mouseIsDown)
@@ -151,7 +169,6 @@ function update()
     if (player1.mana < 100)
     {
       player1.mana += 1;
-      console.log(player1.mana);
 
     }
 
@@ -171,12 +188,12 @@ render = function()
   blocks.forEach(function(i) { i.drawblock(ctx);})
   player1.draw(ctx);
   player1.DrawManaMeter(ctx);
-
+  blocks.forEach(function(i) {i.collisionUpdate();})
   requestAnimationFrame(render);
 }
 function main()
 {
-  player1 = new player(0,0,5,100,false);
+  player1 = new player(0,0,5,100,false,false);
   var randomBlockNum = Math.floor(Math.random() * 10) + 1;
   for (var i = 0; i < randomBlockNum; i++)
   {
