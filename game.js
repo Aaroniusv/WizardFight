@@ -49,6 +49,17 @@ window.addEventListener('mousemove', function(e)
         mousePosition = getMousePos(canvas, e);
 }, false);
 
+var blocks = [];
+var tileMaker = function(x,y)
+{
+    this.drawblock = function(ctx)
+    {
+      ctx.fillStyle = 'grey';
+      ctx.fillRect(x,y,20,20);
+    };
+
+};
+
 var lightningBolt = function(x, y, mx, my, age, speed)
 {
   this.x = x;
@@ -166,5 +177,11 @@ render = function()
 function main()
 {
   player1 = new player(0,0,5,100,false);
+  var randomBlockNum = Math.floor(Math.random() * 10) + 1;
+  for (var i = 0; i < randomBlockNum; i++)
+  {
+
+
+  }
   render();
 }
