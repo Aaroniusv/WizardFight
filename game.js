@@ -50,12 +50,12 @@ window.addEventListener('mousemove', function(e)
 }, false);
 
 var blocks = [];
-var tileMaker = function(x,y)
+var Block = function(x,y)
 {
     this.drawblock = function(ctx)
     {
       ctx.fillStyle = 'grey';
-      ctx.fillRect(x,y,20,20);
+      ctx.fillRect(x,y,40,40);
     };
 
 };
@@ -168,7 +168,7 @@ render = function()
   //this should just keep the alive Game.projectiles
   Game.projectiles = Game.projectiles.filter(function(i) {return i.alive})
   Game.projectiles.forEach(function(i) { i.update(ctx);})
-
+  blocks.forEach(function(i) { i.drawblock(ctx);})
   player1.draw(ctx);
   player1.DrawManaMeter(ctx);
 
@@ -180,7 +180,7 @@ function main()
   var randomBlockNum = Math.floor(Math.random() * 10) + 1;
   for (var i = 0; i < randomBlockNum; i++)
   {
-
+    blocks.push(new Block(canvas.width/(Math.floor(Math.random() * 10) + 1),canvas.height/ (Math.floor(Math.random() * 10) + 1 )) );
 
   }
   render();
