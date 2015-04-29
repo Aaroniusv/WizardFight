@@ -63,18 +63,40 @@ var Block = function(x,y)
     };
     this.collisionUpdate = function()
     {
-      if
-      (
-        (this.x - player1.x <= 40 && player1.x - this.x <=35) &&
-        (this.y - player1.y <= 40 && player1.y - this.y <=35)
-      )
-      {
-        console.log("hit");
-        return true;
-      }
-    {
-
-    }
+        if((player1.x < this.x) && this.x - player1.x <= 40 && this.y - player1.y <= 40 && player1.y - this.y <=40 )
+        {
+          player1.x -= 3;
+        }
+        if((player1.x > this.x) && player1.x - this.x <= 40 && this.y - player1.y <= 40 && player1.y - this.y <=40 )
+        {
+          player1.x += 3;
+        }
+        if((player1.y > this.y) && player1.y - this.y <= 40 && this.x - player1.x <= 40 && player1.x - this.x <=40 )
+        {
+          player1.y += 3;
+        }
+        if((player1.y < this.y) && this.y - player1.y <= 40 && this.x - player1.x <= 40 && player1.x - this.x <=40 )
+        {
+          player1.y -= 3;
+        }
+/*
+        if(this.x - player1.x <= 40 && (this.y - player1.y <= 40 || player1.y - this.y <=40))
+        {
+          player1.x -= 3;
+        }
+        if(player1.x - this.x <=40 && (this.y - player1.y <= 40 || player1.y - this.y <=40))
+        {
+          player1.x += 3;
+        }
+        if(this.y - player1.y <= 40 && (this.x - player1.x <= 40 ||  player1.x - this.x <=40))
+        {
+          player1.y -= 3;
+        }
+        if(player1.y - this.y <=40 && (this.x - player1.x <= 40 ||  player1.x - this.x <=40))
+        {
+          player1.y += 3;
+        }
+        */
     };
 
 };
@@ -100,7 +122,7 @@ var lightningBolt = function(x, y, mx, my, age, speed)
   this.draw = function(ctx)
   {
     var size = 10
-    ctx.save()
+    ctx.save();
     ctx.translate(this.x + size/2, this.y + size/2)
     ctx.rotate(Math.random()*Math.PI*2)
     ctx.beginPath();
@@ -113,13 +135,16 @@ var lightningBolt = function(x, y, mx, my, age, speed)
 }
 
 
-var player = function(x,y,hearts,mana,isShooting,collision)
+var player = function(x,y,hearts,mana,leftcol,rightcol,upcol,downcol)
 {
   this.x = x;
   this.y = y;
   this.hearts = hearts;
   this.mana = mana;
-  this.isShooting = isShooting;
+  this.leftcol = leftcol;
+  this.rightcol = rightcol;
+  this.upcol = upcol;
+  this.downcol = downcol;
   this.draw = function(ctx)
   {
     ctx.drawImage(wizard,this.x,this.y,40,40);
@@ -134,7 +159,6 @@ var player = function(x,y,hearts,mana,isShooting,collision)
   {
       Game.projectiles.push(new lightningBolt(this.x+30, this.y+5,
           this.x - mousePosition.x, this.y - mousePosition.y, 70, 10));
-
   };
 };
 
@@ -142,18 +166,22 @@ function update()
 {
 	if(keys[68])
   {
-		player1.x += 3;
+    if (!player1.rightcol)
+      player1.x += 3;
 	}
 	if(keys[65])
   {
+    if(!player1.leftcol)
 		player1.x -= 3;
 	}
   if(keys[87])
   {
+    if(!player1.upcol)
 		player1.y -= 3;
 	}
   if(keys[83])
   {
+    if(!player1.downcol)
     player1.y += 3;
 	}
   if(mouseIsDown)
@@ -169,11 +197,8 @@ function update()
     if (player1.mana < 100)
     {
       player1.mana += 1;
-
     }
-
   }
-
 }
 render = function()
 {
@@ -186,14 +211,15 @@ render = function()
   Game.projectiles = Game.projectiles.filter(function(i) {return i.alive})
   Game.projectiles.forEach(function(i) { i.update(ctx);})
   blocks.forEach(function(i) { i.drawblock(ctx);})
-  player1.draw(ctx);
+
   player1.DrawManaMeter(ctx);
+  player1.draw(ctx);
   blocks.forEach(function(i) {i.collisionUpdate();})
   requestAnimationFrame(render);
 }
 function main()
 {
-  player1 = new player(0,0,5,100,false,false);
+  player1 = new player(400,400,5,100,false,false,false,false);
   var randomBlockNum = Math.floor(Math.random() * 10) + 1;
   for (var i = 0; i < randomBlockNum; i++)
   {
