@@ -118,6 +118,9 @@ var lightningBolt = function(x, y, mx, my, age, speed)
     {
       this.my *= -1;
     }
+
+
+    
     var norm = Math.sqrt(mx*mx + my*my) // for direction
     this.x -= this.speed * this.mx / (norm);
     this.y -= this.speed * this.my / (norm);
