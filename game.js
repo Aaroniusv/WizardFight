@@ -79,24 +79,6 @@ var Block = function(x,y)
         {
           player1.y -= 3;
         }
-/*
-        if(this.x - player1.x <= 40 && (this.y - player1.y <= 40 || player1.y - this.y <=40))
-        {
-          player1.x -= 3;
-        }
-        if(player1.x - this.x <=40 && (this.y - player1.y <= 40 || player1.y - this.y <=40))
-        {
-          player1.x += 3;
-        }
-        if(this.y - player1.y <= 40 && (this.x - player1.x <= 40 ||  player1.x - this.x <=40))
-        {
-          player1.y -= 3;
-        }
-        if(player1.y - this.y <=40 && (this.x - player1.x <= 40 ||  player1.x - this.x <=40))
-        {
-          player1.y += 3;
-        }
-        */
     };
 
 };
@@ -110,14 +92,38 @@ var lightningBolt = function(x, y, mx, my, age, speed)
   this.age = age;
   this.alive = true;
   this.speed = speed
+  this.CollisionUpdate = function()
+  {
+
+
+
+  };
   this.update = function(ctx)
   {
     this.age -= 1
     this.alive = (this.age > 0) ? true : false
+    if (canvas.width - this.x < 3)
+    {
+      this.mx *= -1;
+    }
+    if (this.x - 1 < 3)
+    {
+      this.mx *= -1;
+    }
+    if (canvas.height - this.y < 3)
+    {
+      this.my *= -1;
+    }
+    if (this.y - 1 < 3)
+    {
+      this.my *= -1;
+    }
     var norm = Math.sqrt(mx*mx + my*my) // for direction
-    this.x -= this.speed * mx / (norm);
-    this.y -= this.speed * my / (norm);
+    this.x -= this.speed * this.mx / (norm);
+    this.y -= this.speed * this.my / (norm);
     this.draw(ctx);
+
+
   };
   this.draw = function(ctx)
   {
