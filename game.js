@@ -52,14 +52,16 @@ window.addEventListener('mousemove', function(e)
 
 
 var blocks = [];
-var Block = function(x,y)
+var Block = function(x,y,bx,by)
 {
     this.x = x;
     this.y = y;
+    this.bx = bx;
+    this.by = by;
     this.drawblock = function(ctx)
     {
       ctx.fillStyle = 'grey';
-      ctx.fillRect(x,y,40,40);
+      ctx.fillRect(this.x,this.y,this.bx,this.by);
     };
     this.collisionUpdate = function()
     {
@@ -118,9 +120,6 @@ var lightningBolt = function(x, y, mx, my, age, speed)
     {
       this.my *= -1;
     }
-
-
-    
     var norm = Math.sqrt(mx*mx + my*my) // for direction
     this.x -= this.speed * this.mx / (norm);
     this.y -= this.speed * this.my / (norm);
@@ -232,8 +231,17 @@ function main()
   var randomBlockNum = Math.floor(Math.random() * 10) + 1;
   for (var i = 0; i < randomBlockNum; i++)
   {
-    blocks.push(new Block(canvas.width/(Math.floor(Math.random() * 10) + 1),canvas.height/ (Math.floor(Math.random() * 10) + 1 )) );
-
+    blocks.push
+    (
+      new Block
+      (canvas.width/(Math.floor(Math.random() * 10) + 1),
+      canvas.height/ (Math.floor(Math.random() * 10) + 1 ),
+      40,40)
+    );
   }
+  blocks.push (new Block(0,0,canvas.width,5));
+  blocks.push (new Block(0,0,5,canvas.height));
+  blocks.push (new Block(0,canvas.height-5,canvas.width,canvas.height));
+  blocks.push (new Block(canvas.width-5,0,canvas.width,canvas.height));
   render();
 }
