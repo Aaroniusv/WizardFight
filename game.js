@@ -67,19 +67,24 @@ var Block = function(x,y,bx,by)
     {
         if((player1.x < this.x) && this.x - player1.x <= 40 && this.y - player1.y <= 40 && player1.y - this.y <=40 )
         {
+          console.log("left collission");
           player1.x -= 3;
         }
         if((player1.x > this.x) && player1.x - this.x <= 40 && this.y - player1.y <= 40 && player1.y - this.y <=40 )
         {
           player1.x += 3;
+          console.log("right collission");
+
         }
         if((player1.y > this.y) && player1.y - this.y <= 40 && this.x - player1.x <= 40 && player1.x - this.x <=40 )
         {
           player1.y += 3;
+          console.log("bottom collission");
         }
         if((player1.y < this.y) && this.y - player1.y <= 40 && this.x - player1.x <= 40 && player1.x - this.x <=40 )
         {
           player1.y -= 3;
+          console.log("top collission");
         }
     };
 
